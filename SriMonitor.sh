@@ -8,11 +8,10 @@ LOG_FILE="finalOutput.log"
 TIMESTAMP=$(date)
 
 # -------- CPU USAGE (Unix standard) --------
-CPU_IDLE=$(top -bn1 | grep "Cpu(s)" | awk '{print $8}' | cut -d. -f1)
+CPU_IDLE=$(top -bn1 | grep "Cpu(s)" | sed 's/.*, *\([0-9.]*\)%* id.*/\1/' | awk '{print int($1)}')
 CPU=$((100 - CPU_IDLE))
 
 echo "CPU Usage: $CPU%"
-
 
 # -------- MEMORY USAGE (based on usage/total) --------
 MEM=$(free | awk '/Mem:/ {printf "%.2f", ($3/$2)*100}')
